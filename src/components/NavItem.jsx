@@ -1,5 +1,5 @@
 import React from "react"
-import { Link } from "react-router-dom"
+import { Link, NavLink } from "react-router-dom"
 
 const NavItem = ({
     text,
@@ -8,14 +8,14 @@ const NavItem = ({
 }) => {
 
     return (
-        <Link to={to} className="container w-[80%] h-10 bg-slate-400 flex">
+        <NavLink to={to} className={`container rounded-xl w-[180px] text-[#0f0f0f] h-10 px-3.5 space-x-5 hover:bg-[#000] hover:bg-opacity-5 bg-white flex items-center`}>
             <div>
                 {icon}
             </div>
             <div className="text">
                 {text}
             </div>
-        </Link>
+        </NavLink>
     )
 }
 

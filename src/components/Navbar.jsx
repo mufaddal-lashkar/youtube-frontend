@@ -25,13 +25,13 @@ const Navbar = () => {
 
     return (
         <div className="container h-full justify-between flex">
-            <div className="flex h-full w-[185px] items-center px-5 space-x-4">
+            <div className="flex h-full w-[185px] items-center px-6 space-x-4">
                 <i className="fa-solid fa-bars text-[#030303]"></i>
                 <h1>TubeFlix</h1>
             </div>
             <div className="h-full w-[632px] flex items-center">
                 <div className="flex items-center">
-                    <input type="text" value={searchText} onChange={handleSearchTextChange} className="w-[514px] h-[37px] bg-[#ffffff] border-[1px] border-[#ccc] border-r-0 rounded-l-full outline-none px-5" />
+                    <input type="text" placeholder="Search" value={searchText} onChange={handleSearchTextChange} className="w-[514px] h-[37px] bg-[#ffffff] border-[1px] border-[#ccc] border-r-0 rounded-l-full outline-none px-5" />
                     <button onClick={handleClearSearchText} className="bg-[#ffffff] flex justify-center items-center text-xl h-[37px] w-[37px] border-[1px] border-[#ccc] border-l-0">
                         {xmark}
                     </button>

@@ -15,7 +15,7 @@ const Layout = () => {
                 <Navbar />
             </div>
             <SideNav />
-            <div className="w-[calc(100%_-_244px)] h-[calc(100%_-_56px)] fixed right-0 bottom-0">
+            <div className="w-[calc(100%_-_200px)] h-[calc(100%_-_56px)] fixed right-0 bottom-0">
                 <Outlet />
             </div>
         </>
