@@ -25,16 +25,8 @@ const Home = () => {
 
     return (
         <>
-            <div className="wrapper w-[100%] grid-cols-3 grid-rows-3 gap-10 h-[100vh] bg-slate-300 flex flex-col justify-center items-center">
-                <div >5</div>
-                <div >6</div>
-                <div >7</div>
-                <div >8</div>
-                <div >9</div>
-                <div >10</div>
-                <div >11</div>
-                <div >12</div>
-                <div >13</div>
+            <div className="wrapper w-[100%] grid-cols-3 grid-rows-3 gap-10 h-[100vh] overflow-y-scroll bg-slate-300 flex flex-col justify-center items-center">
+
             </div>
         </>
     )
