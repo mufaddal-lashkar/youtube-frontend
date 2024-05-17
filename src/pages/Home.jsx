@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { getVideos } from "../store/VideosSlice"
+import { logoutUser } from "../store/UserSlice";
 
 const Home = () => {
 
@@ -13,20 +16,41 @@ const Home = () => {
         return user;
     }
 
-    
+    const dispatch = useDispatch()
+    const [page, setPage] = useState(1)
+    // useEffect(() => {
+        const getHomeVideos = () => {   
+            dispatch(getVideos(page))
+                .then((result) => {
+                    if(result.payload) {
+                        console.log(result);
+                    }
+                })
+        }
+    // },)
  
+    const navigate = useNavigate()
     const handleLogout = () => {
-        console.log("here");
-        localStorage.removeItem('user')
-        window.location.reload();
+        dispatch(logoutUser())
+        .then((res) => console.log(res))
+        navigate('/login')
+        
     }
-
+    
     const [user, setUser] = useState(getUser())
+    // console.log(user);
+    // useEffect(() => {
+    //     if(!user) {
+    //         navigate("/login")
+    //     }
+    // },[])
+
 
     return (
         <>
             <div className="wrapper w-[100%] grid-cols-3 grid-rows-3 gap-10 h-[100vh] overflow-y-scroll bg-slate-300 flex flex-col justify-center items-center">
-
+                <button onClick={getHomeVideos}>Click</button>
+                <button onClick={handleLogout}>Logout</button>
             </div>
         </>
     )

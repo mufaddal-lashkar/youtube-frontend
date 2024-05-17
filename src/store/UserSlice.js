@@ -5,12 +5,31 @@ import {server} from "../conf"
 export const loginUser = createAsyncThunk(
     'user/loginUser',
     async (userCredential) => {
-        const request = await axios.post(`${server}/users/login`, userCredential)
+        const request = await axios.post(`${server}/users/login`, userCredential )
         // console.log(request);
         const response = await request.data.data
         // console.log(response);
         localStorage.setItem('user', JSON.stringify(response))
+        // const parsedResponse = JSON.parse(localStorage.getItem('user'))
+        // console.log(parsedResponse);
+        // function setCookie(name, value) {
+        //     var expires = "";
+        //     document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        // }
+        // setCookie("accessToken", parsedResponse.accessToken);
+        // setCookie("refreshToken", parsedResponse.refreshToken);
+
         return response
+    }
+)
+
+export const logoutUser = createAsyncThunk(
+    'user/logoutUser',
+    async () => {
+        const request = await axios.post(`${server}/users/logout`)
+        const response = request
+        console.log(response);
+        localStorage.removeItem('user')
     }
 )
 
@@ -42,6 +61,21 @@ const userSlice = createSlice({
             } else {
                 state.error = action.error.message;
             }
+        })
+        .addCase(logoutUser.pending, (state) => {
+            state.loading = true;
+            state.user = null;
+            state.error = null;
+        })
+        .addCase(logoutUser.fulfilled, (state, action) => {
+            state.loading = false;
+            state.user = null;
+            state.error = null;
+        })
+        .addCase(logoutUser.rejected, (state, action) => {
+            state.loading = false;
+            state.user = null;
+            state.error = action.error.message
         })
     }
 })
