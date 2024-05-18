@@ -66,7 +66,7 @@ const VideosSlice = createSlice({
         })
         .addCase(getSearchVideos.pending, (state) => {
             state.loading = true;
-            state.videos = null;
+            state.videos = null; 
             state.error = null;
         })
         .addCase(getSearchVideos.fulfilled, (state, action) => {
