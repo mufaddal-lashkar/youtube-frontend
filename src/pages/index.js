@@ -6,6 +6,7 @@ import Profile from "./Profile"
 import Shorts from "./Shorts"
 import Subscriptions from "./Subscriptions"
 import Search from "./Search";
+import Video from "./Video"
 
 export {
     Home,
@@ -15,5 +16,6 @@ export {
     Profile,
     Shorts,
     Subscriptions,
-    Search
+    Search,
+    Video
 }

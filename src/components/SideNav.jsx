@@ -10,7 +10,7 @@ const Navbar = () => {
             <div className="mb-3">
                 <NavItem to="/" text="Home" icon={<i className="fa-solid fa-house"></i>}/>
                 <NavItem to="/shorts" text="Shorts" icon={<i className="fa-brands fa-youtube"></i>}/>
-                <NavItem to="/Subscriptions" text="Subscriptions" icon={<i className="fa-solid fa-video"></i>}/>
+                <NavItem to="/subscriptions" text="Subscriptions" icon={<i className="fa-solid fa-video"></i>}/>
             </div>
             <hr className="h-[1px] w-[80%] bg-[#ccc]"/>
 
