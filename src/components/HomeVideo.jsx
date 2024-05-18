@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const HomeVideo = ({
     thumbnail,
@@ -7,7 +8,8 @@ const HomeVideo = ({
     avatar,
     channelName,
     views,
-    uploaded
+    uploaded,
+    videoId
 }) => {
 
     // fuction to get data when video is uploaded
@@ -51,7 +53,7 @@ const HomeVideo = ({
     const  minAndSec = secondsToMinutes(duration)
 
     return (
-        <div className="container w-[300px] h-[320px] text-[10px] block">
+        <Link to={{ pathname: '/video', search: `?videoId=${videoId}` }} className="container w-[300px] h-[320px] text-[10px] block">
             <div className="thumbnail w-full h-[180px] relative overflow-hidden rounded-xl">
                 <img src={thumbnail} alt="thumbnail" />
                 <div className="duration m-2 w-13 h-3 absolute right-0 bottom-0 bg-[#252525] flex justify-center items-center text-xs text-white py-3 rounded-lg p-2"><p>{minAndSec}</p></div>
@@ -71,7 +73,7 @@ const HomeVideo = ({
                     </div>
                 </div>
             </div>
-        </div>
+        </Link>
     )
 }
 

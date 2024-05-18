@@ -30,16 +30,6 @@ const Home = () => {
         navigate('/login')
         
     }
-    
-
-    // const [videos, setVideos] = useState(JSON.parse(localStorage.getItem('videos')))
-    // console.log(videos);
-    
-    // const getHomeVideos = () => {   
-    //     dispatch(getVideos(page))
-    // }
-    // getHomeVideos()
-    // console.log(page);
 
     // Initialize videos state as an empty array
     const [videos, setVideos] = useState([]); 
@@ -65,7 +55,7 @@ const Home = () => {
     
     return (
         <div className="wrapper w-[100%] h-[100vh] overflow-y-scroll flex flex-col">
-            <div className=" py-10 flex flex-wrap space-x-3 justify-center">
+            <div className=" py-10 flex flex-wrap space-x-3">
                 {/* <button onClick={getHomeVideos}>Click</button>
                 <button onClick={handleLogout}>Logout</button> */}
                 {
@@ -79,6 +69,7 @@ const Home = () => {
                                 avatar={vid.owner[0].avatar}
                                 views={vid.views}
                                 uploaded={vid.createdAt}
+                                videoId={vid._id}
                                 />
                     })
                 }

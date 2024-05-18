@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
     
@@ -23,6 +24,17 @@ const Navbar = () => {
         setSearchText("")
     }
 
+    const navigate = useNavigate()
+    const handleSearch = () => {
+        if (searchText === "") {
+            alert("Enter keywords for search")
+        } else {
+            localStorage.setItem('query', searchText)
+            navigate('/search')
+            window
+        }   
+    }
+
     return (
         <div className="container h-full justify-between flex">
             <div className="flex h-full w-[185px] items-center px-6 space-x-4">
@@ -35,7 +47,7 @@ const Navbar = () => {
                     <button onClick={handleClearSearchText} className="bg-[#ffffff] flex justify-center items-center text-xl h-[37px] w-[37px] border-[1px] border-[#ccc] border-l-0">
                         {xmark}
                     </button>
-                    <button className="w-[64px] h-[37px] text-[#030303] bg-[#ffffff] border-[1px] border-[#ccc] border-l-0 rounded-r-full"><i className="fa-solid fa-magnifying-glass"></i></button>
+                    <button onClick={handleSearch} className="w-[64px] h-[37px] text-[#030303] bg-[#ffffff] border-[1px] border-[#ccc] border-l-0 rounded-r-full"><i className="fa-solid fa-magnifying-glass"></i></button>
                 </div>
             </div>
             <div className="h-full w-[64px] flex justify-center items-center ">
