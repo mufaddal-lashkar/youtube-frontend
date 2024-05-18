@@ -10,14 +10,14 @@ export const loginUser = createAsyncThunk(
         const response = await request.data.data
         // console.log(response);
         localStorage.setItem('user', JSON.stringify(response))
-        // const parsedResponse = JSON.parse(localStorage.getItem('user'))
-        // console.log(parsedResponse);
-        // function setCookie(name, value) {
-        //     var expires = "";
-        //     document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        // }
-        // setCookie("accessToken", parsedResponse.accessToken);
-        // setCookie("refreshToken", parsedResponse.refreshToken);
+        const parsedResponse = JSON.parse(localStorage.getItem('user'))
+        console.log(parsedResponse);
+        function setCookie(name, value) {
+            var expires = "";
+            document.cookie = name + "=" + (value || "") + expires + "; path=/";
+        }
+        setCookie("accessToken", parsedResponse.accessToken);
+        setCookie("refreshToken", parsedResponse.refreshToken);
 
         return response
     }
@@ -26,7 +26,10 @@ export const loginUser = createAsyncThunk(
 export const logoutUser = createAsyncThunk(
     'user/logoutUser',
     async () => {
-        const request = await axios.post(`${server}/users/logout`)
+        const user = JSON.parse(localStorage.getItem('user'))
+        const accessToken = user.accessToken
+        const params = {accessToken : accessToken}
+        const request = await axios.post(`${server}/users/logout`, {params})
         const response = request
         console.log(response);
         localStorage.removeItem('user')

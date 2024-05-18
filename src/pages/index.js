@@ -5,6 +5,7 @@ import Layout from "./Layout";
 import Profile from "./Profile"
 import Shorts from "./Shorts"
 import Subscriptions from "./Subscriptions"
+import Search from "./Search";
 
 export {
     Home,
@@ -13,5 +14,6 @@ export {
     Layout,
     Profile,
     Shorts,
-    Subscriptions
+    Subscriptions,
+    Search
 }

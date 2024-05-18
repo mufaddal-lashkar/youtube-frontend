@@ -5,11 +5,12 @@ import {server} from "../conf"
 export const getVideos = createAsyncThunk(
     'videos/getVideos',
     async (page) => {
-        const request = await axios.get(`${server}/videos/get-all-videos?page=${page}&limit=10`)
+        // localStorage.removeItem('videos')
+        const request = await axios.get(`${server}/videos/get-all-videos?page=${page}&limit=20`)
         // console.log(request);
         const response = await request.data.data
         // console.log(response);
-        localStorage.setItem('videos', JSON.stringify(response))
+        // localStorage.setItem('videos', JSON.stringify(response))
         return response
     }
 )
