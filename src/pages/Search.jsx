@@ -23,13 +23,13 @@ const Search = () => {
     useEffect(() => {
         const serachVid = () => {
             console.log(searchTerm);
-            const info= {
-                search: searchTerm,
-                page: page,
-                limit: 20
-            }
+            const params = {
+                page: 1,
+                limit: 10,
+                query: '20'
+              };
             
-            dispatch(getSearchVideos(info))
+            dispatch(getSearchVideos(params))
                 .then((response) => {
                     console.log(response.payload);
                     setVideos(response.payload)
