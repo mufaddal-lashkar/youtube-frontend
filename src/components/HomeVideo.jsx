@@ -64,7 +64,7 @@ const HomeVideo = ({
                 </div>
                 <div className="info w-[calc(100%_-_36px)] text-xs overflow-hidden text-ellipsis">
                     <div className="mb-1">
-                        <p className="font-semibold text-sm h-[40px] w-full overflow-hidden text-ellipsis">{title} Lorem ipsum dolor sit amet consectetur adipisicing elit. Recusandae, odit. Ad, rerum corporis quos necessitatibus neque pariatur, dolor accusantium nemo odio nihil, perspiciatis fugit? Nisi ab repudiandae neque ipsam aliquid!</p>
+                        <p className="font-semibold text-sm h-[max-content] max-h-[40px] w-full overflow-hidden">{title}</p>
                     </div>
                     <p>{channelName}</p>
                     <div className="flex space-x-4">
