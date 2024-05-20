@@ -46,6 +46,7 @@ const Video = () => {
     useEffect(() => {
         if(video) {
             getChannelSubs()
+            getVideoComments()
         }
     },[video])
     const getChannelSubs = async () => {
@@ -65,7 +66,7 @@ const Video = () => {
     const getVideoComments = async () => {
         if(video) {
             try {
-                const apiUrl = `${server}/comments/${videoId}?page=${commentPage}&limit=25`
+                const apiUrl = `${server}/comments/${videoId}?page=${commentPage}&limit=1000`
                 const response = await axios.get(apiUrl)
                 // console.log(response.data.data);
                 setComments(response.data.data)
@@ -126,12 +127,15 @@ const Video = () => {
         const response = await axios.post(apiUrl, data)
         console.log(response.data.data);
         setCommentText("")
-    }
-    useEffect(() => {
         getVideoComments()
-    },[video, postComment])
+    }
+    const cancelComment = () => {
+        setCommentText("")
+    }
+    // useEffect(() => {
+    //     getVideoComments()
+    // },[video, postComment])
     
-    console.log(ago);
     return ( 
         <div className="container h-[100vh] w-full flex overflow-y-scroll overflow-x-hidden">
             <div className="left-panel h-full w-[70%] p-6">
@@ -143,13 +147,11 @@ const Video = () => {
                     <div className="channel-options w-full flex justify-between my-2 h-11">
                         <div className="channel-info flex h-full items-center w-fit">
                             <img className="w-[38px] h-[38px] rounded-full" src={video?.owner.avatar} alt="channel-avatar" />
-                            <img className="w-[44px] h-[44px] rounded-full" src={video?.owner.avatar} alt="channel-avatar" />
                             <div className="flex flex-col justify-center mx-3">
                                 <p className="font-medium">{video?.owner.username}</p>
                                 <p className="text-xs text-[#606060]">{channelSub?.length}<span className="mx-2">subscribers</span></p>
                             </div>
                             <button className="w-[74px] text-xs h-7 rounded-full font-semibold text-white flex justify-center items-center bg-[#272727] px-2">Subscribe</button>
-                            <button className="w-[64px] text-xs h-7 rounded-full font-semibold text-white flex justify-center items-center bg-[#272727]">Subscribe</button>
                         </div>
                         <div className="options flex space-x-2 h-full text-xs w-fit items-center">
                             <div className="like-dislike flex">
@@ -165,6 +167,31 @@ const Video = () => {
                     <div className="video-description bg-[#000000] bg-opacity-5 w-full h-auto p-2 rounded-xl text-xs text-[#0f0f0f] mt-3">
                         <span className="font-bold mr-3">{video?.views} views</span><span className="font-bold mr-3">{`${ago.value} ${ago.unit} ago`}</span><br />
                         {video?.description}
+                    </div>
+                    <div className="video-comments my-4">
+                        <span className="font-semibold text-base">{comments?.length} Comments</span>
+                        <div className="add-comment w-full h-auto flex my-4 ">
+                            <img className="w-[38px] h-[38px] rounded-full" src={user?.user.avatar} alt="avatar" />
+                            <div className="w-[calc(100%_-_38px)] px-4 space-y-3">
+                                <input value={commentText} onChange={(e) => setCommentText(e.target.value)} className="border-b outline-none w-full border-[#616161]" type="text" />
+                                <div className="buttons flex justify-end">
+                                    <button onClick={cancelComment} className="w-[74px] h-[36px] bg-black bg-opacity-5 rounded-full hover:bg-opacity-10">Cancel</button>
+                                    <button onClick={postComment} className="w-[93px] h-[36px] rounded-full text-white font-medium bg-[#065fd4] disabled:bg-black disabled:bg-opacity-10 disabled:font-normal disabled:text-black" disabled={submitDisabled} >Comment</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div className="all-comments">
+                            {comments?.map((com) => {
+                                return <Comment 
+                                    key={com._ID}
+                                    content={com.content}
+                                    avatar={com.owner.avatar}
+                                    username={com.owner.username}
+                                    ownerId={com.owner._id}
+                                    createdAt={com.createdAt}
+                                />
+                            })}
+                        </div>
                     </div>
                 </div> 
             </div>
