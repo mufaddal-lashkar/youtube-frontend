@@ -103,8 +103,8 @@ const Video = () => {
             return { value: minutes, unit: 'minute' + (minutes > 1 ? 's' : '') };
         } else {
             return { value: seconds, unit: 'second' + (seconds > 1 ? 's' : '') };
-        }
-    }
+        } 
+    } 
     const ago = getTimeDifference(video?.createdAt);
 
     // function to disable comment post button if input is empty
@@ -131,6 +131,7 @@ const Video = () => {
         getVideoComments()
     },[video, postComment])
     
+    console.log(ago);
     return ( 
         <div className="container h-[100vh] w-full flex overflow-y-scroll overflow-x-hidden">
             <div className="left-panel h-full w-[70%] p-6">
@@ -142,11 +143,13 @@ const Video = () => {
                     <div className="channel-options w-full flex justify-between my-2 h-11">
                         <div className="channel-info flex h-full items-center w-fit">
                             <img className="w-[38px] h-[38px] rounded-full" src={video?.owner.avatar} alt="channel-avatar" />
+                            <img className="w-[44px] h-[44px] rounded-full" src={video?.owner.avatar} alt="channel-avatar" />
                             <div className="flex flex-col justify-center mx-3">
                                 <p className="font-medium">{video?.owner.username}</p>
                                 <p className="text-xs text-[#606060]">{channelSub?.length}<span className="mx-2">subscribers</span></p>
                             </div>
                             <button className="w-[74px] text-xs h-7 rounded-full font-semibold text-white flex justify-center items-center bg-[#272727] px-2">Subscribe</button>
+                            <button className="w-[64px] text-xs h-7 rounded-full font-semibold text-white flex justify-center items-center bg-[#272727]">Subscribe</button>
                         </div>
                         <div className="options flex space-x-2 h-full text-xs w-fit items-center">
                             <div className="like-dislike flex">
@@ -162,32 +165,6 @@ const Video = () => {
                     <div className="video-description bg-[#000000] bg-opacity-5 w-full h-auto p-2 rounded-xl text-xs text-[#0f0f0f] mt-3">
                         <span className="font-bold mr-3">{video?.views} views</span><span className="font-bold mr-3">{`${ago.value} ${ago.unit} ago`}</span><br />
                         {video?.description}
-                    </div>
-                    <div className="video-comments w-full h-auto mt-5">
-                        <p className="font-bold text-lg">{comments.length} Comments</p>
-                        <div className="add-comment w-full h-auto flex my-4">
-                            <img className="w-[38px] h-[38px] rounded-full" src={user?.user.avatar} alt="avatar" />
-                            <div className="w-[calc(100%_-_38px)] px-4 space-y-3">
-                                <input value={commentText} onChange={(e) => setCommentText(e.target.value)} type="text" className="w-full outline-none border-b border-[#747474]"/>
-                                <div className="flex items-center justify-end">
-                                    <button className="w-[74px] h-9 bg-white rounded-full hover:bg-[#000000] hover:bg-opacity-10">Cancel</button>
-                                    <button disabled={submitDisabled} onClick={postComment} className="w-[93px] h-9 bg-[#065fd4] font-medium text-white disabled:font-normal disabled:text-black disabled:bg-black disabled:bg-opacity-5 rounded-full">Comment</button>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="all-comments">
-                            {comments?.map((com) => {
-                                return <Comment 
-                                    key={com._id}
-                                    content={com.content}
-                                    username={com.owner.username}
-                                    avatar={com.owner.avatar}
-                                    ownerId ={com.owner._id}
-                                    createdAt={com.createdAt}
-                                    likes={com.likes}
-                                    />
-                            })}
-                        </div>
                     </div>
                 </div> 
             </div>
