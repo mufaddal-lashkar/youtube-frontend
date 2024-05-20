@@ -4,6 +4,7 @@ import ProtectedRoute from "./ProtectedRoute"
 import SideNav from "./SideNav"
 import Navbar from "./Navbar"
 import HomeVideo from "./HomeVideo"
+import Comment from "./Comment"
 
 export {
     InputField,
@@ -11,5 +12,6 @@ export {
     SideNav,
     Navbar,
     ProtectedRoute,
-    HomeVideo
+    HomeVideo,
+    Comment
 }
