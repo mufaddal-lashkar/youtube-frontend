@@ -6,7 +6,7 @@ const Comment = ({
     username,
     ownerId,
     createdAt,
-    likes
+    likes,
 }) => {
 
     // fuction to get data when video is uploaded
