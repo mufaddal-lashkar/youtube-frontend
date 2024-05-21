@@ -4,17 +4,7 @@ import { server } from "../conf";
 import { Comment } from "../components";
 
 const Video = () => {
-
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))) 
-    const [videoId, setVideoId] = useState();
-    const [video, setVideo] = useState();
-    const [channeInfo, setChannelInfo] = useState()
-    const [isSubscribed, setIsSubscribed] = useState(false)
-    const [commentText, setCommentText] = useState("")
-    const [submitDisabled, setSubmitDisabled] = useState(true)
-    const [comments, setComments] = useState([])
-    const [commentPage, setCommentPage] = useState(1)
-
 
     // function to extract video id from url
     useEffect(() => {
@@ -26,8 +16,10 @@ const Video = () => {
         };
         extractVideoIdFromUrl();
     }, []);
-    
-    // function to get video by id
+
+    // function to handle video
+    const [videoId, setVideoId] = useState();
+    const [video, setVideo] = useState();
     useEffect(() => {
         if(videoId) {
             getVideoById(videoId)
@@ -43,29 +35,6 @@ const Video = () => {
             console.error("Error fetching video:", error);
         }
     }
-
-    // function to get channel subscribers
-    useEffect(() => {
-        if(video) {
-            getVideoComments()
-        }
-    },[video])
-
-    // function to get all comments
-    const getVideoComments = async () => {
-        if(video) {
-            try {
-                const apiUrl = `${server}/comments/${videoId}?page=${commentPage}&limit=1000`
-                const response = await axios.get(apiUrl)
-                // console.log(response.data.data);
-                setComments(response.data.data)
-            } catch (error) {
-                console.log("Error while fetching comments", error);
-            }
-        }
-    }
-
-    // fuction to get data when video is uploaded
     function getTimeDifference(createdAt) {
         const createdAtDate = new Date(createdAt);
         const nowDate = new Date();
@@ -97,16 +66,11 @@ const Video = () => {
     } 
     const ago = getTimeDifference(video?.createdAt);
 
-    // function to disable comment post button if input is empty
-    useEffect(() => {
-        if(commentText !== "") {
-            setSubmitDisabled(false)
-        } else {
-            setSubmitDisabled(true)
-        }
-    }, [commentText])
-
-    // function to post comment
+    // function to handle comment
+    const [commentText, setCommentText] = useState("")
+    const [submitDisabled, setSubmitDisabled] = useState(true)
+    const [comments, setComments] = useState([])
+    const [commentPage, setCommentPage] = useState(1)
     const postComment = async () => {
         const apiUrl = `${server}/comments/${videoId}`
         const data = await {
@@ -121,8 +85,34 @@ const Video = () => {
     const cancelComment = () => {
         setCommentText("")
     }
+    useEffect(() => {
+        if(commentText !== "") {
+            setSubmitDisabled(false)
+        } else {
+            setSubmitDisabled(true)
+        }
+    }, [commentText])
+    useEffect(() => {
+        if(video) {
+            getVideoComments()
+        }
+    },[video])
+    const getVideoComments = async () => {
+        if(video) {
+            try {
+                const apiUrl = `${server}/comments/${videoId}?page=${commentPage}&limit=1000`
+                const response = await axios.get(apiUrl)
+                // console.log(response.data.data);
+                setComments(response.data.data)
+            } catch (error) {
+                console.log("Error while fetching comments", error);
+            }
+        }
+    }
     
-    // function to toggle subscription
+    // function to handle subscription
+    const [isSubscribed, setIsSubscribed] = useState(false)
+    const [isBelled, setIsBelled] = useState(true)
     const handleSubscription = async () => {
         const channelId = video?.owner._id
         const data = {
@@ -134,8 +124,18 @@ const Video = () => {
         getChannelInfo()
         currentUserisSubscribed()
     }
+    const currentUserisSubscribed = async () => {
+        const apiUrl = `${server}/users/isSubscribed/${video?.owner._id}`
+        const data = {
+            userId: user?.user._id
+        }
+        const response = await axios.post(apiUrl,data)
+        // console.log(response.data.data);
+        setIsSubscribed(response.data.data)
+    }
 
-    // function to get channel info
+    // function to handle channel info
+    const [channeInfo, setChannelInfo] = useState()
     const getChannelInfo = async () => {
         const apiUrl = `${server}/users/c/${video?.owner._id}`
         const response = await axios.get(apiUrl)
@@ -147,18 +147,7 @@ const Video = () => {
         currentUserisSubscribed()
     },[video])
 
-    // function to see if user is subscribed to this channel
-    const currentUserisSubscribed = async () => {
-        const apiUrl = `${server}/users/isSubscribed/${video?.owner._id}`
-        const data = {
-            userId: user?.user._id
-        }
-        const response = await axios.post(apiUrl,data)
-        // console.log(response.data.data);
-        setIsSubscribed(response.data.data)
-    }
-
-    // fuction to get likes of video
+    // function to handle likes
     useEffect(() => {
         getVideoLikes()
     },[video])
@@ -167,13 +156,11 @@ const Video = () => {
         const response = await axios.get(apiUrl)
         console.log(response.data.data);
     }
-
-    // function to toggle likes of video
     const handleVideoLike = async () => {
         
     }
 
-    // function to handle sharing
+    // functions to handle sharing
     const [showShareModal, setShowShareModal] = useState(false);
     const handleShare = () => {
         setShowShareModal(true)
@@ -192,12 +179,8 @@ const Video = () => {
             Facebook: `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`,
             Twitter: `https://twitter.com/intent/tweet?url=${encodeURIComponent(shareUrl)}&text=${encodeURIComponent(shareTitle)}`,
             whatsApp: `whatsapp://send?text=${encodeURIComponent(shareTitle + '\n' + shareUrl)}`
-            // Add more app-specific sharing URLs as needed
         };
-
-    // Check if the selected app is supported
     if (appShareUrls.hasOwnProperty(appName)) {
-        // Open a new window/tab with the app's sharing URL
         window.open(appShareUrls[appName], '_blank');
     } else {
         console.error(`Sharing via ${appName} is not supported.`);
@@ -213,6 +196,43 @@ const Video = () => {
         }
         setShowShareModal(false);
     };
+
+    // customized controls in video player
+    const [isEnded, setIsEnded] = useState(false);
+    const mainVideo = document.getElementById("main-vid");
+    const [customVidControlsOpacity, setCustomVidControlsOpacity] = useState(0)
+    const forward10Sec = () => {
+        mainVideo.currentTime += 10;
+    }
+    const backward10Sec = () => {
+        mainVideo.currentTime -= 10;
+    }
+    const handlePlayPause = () => {
+        if (mainVideo.paused) {
+          mainVideo.play();
+          setIsEnded(false)
+        } else {
+          mainVideo.pause();
+        }
+    };
+    const handleVideoEnded = () => {
+        setIsEnded(true);
+        setCustomVidControlsOpacity(100)
+    };
+    const enterVidControlOpacity = () => {
+        setCustomVidControlsOpacity(100)
+    }
+    const leaveVidControlOpacity = () => {
+        setCustomVidControlsOpacity(0)
+    }
+    useEffect(() => {
+        if (!mainVideo) return;
+        mainVideo.addEventListener('ended', handleVideoEnded);
+    
+        return () => {
+          mainVideo.removeEventListener('ended', handleVideoEnded);
+        };
+    }, []);
     
     return ( 
         <>
@@ -238,8 +258,21 @@ const Video = () => {
         )}
         <div className="container h-[100vh] w-full flex overflow-y-scroll overflow-x-hidden">
             <div className="left-panel h-full w-[70%] p-6">
-                <div className="video-container rounded-2xl overflow-hidden w-ful">
-                    <video src={video?.videoFile} alt="Video" controls autoPlay className="w-full"></video>
+                <div className="video-container rounded-2xl relative overflow-hidden w-full">
+                    <video onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} id="main-vid" controls src={video?.videoFile} alt="Video" autoPlay className="w-full duration-300 ease-in-out"></video>
+                    <div onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} className={`additional-controls opacity-${customVidControlsOpacity} absolute top-1/2 transform -translate-y-1/2 w-full h-[30%] p-4 flex items-center justify-evenly`}>
+                        <button onClick={() => forward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
+                            <span><i className="fa-solid fa-backward "></i></span>
+                        </button>
+                        <button onClick={() => handlePlayPause()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
+                            <span>
+                                {isEnded ? <i className="fa-solid fa-arrow-rotate-left"></i> : (mainVideo && mainVideo.paused ? <i className="fa-solid fa-play"></i> : <i className="fa-solid fa-pause"></i>)}
+                            </span>
+                        </button>
+                        <button onClick={() => backward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
+                            <span><i className="fa-solid fa-forward "></i></span>
+                        </button>
+                    </div>
                 </div>
                 <div className="video-info text-sm mt-2 text-[#262626]">
                     <p className="text-base font-bold ">{video?.title}</p>
@@ -250,7 +283,9 @@ const Video = () => {
                                 <p className="font-medium">{channeInfo?.username}</p>
                                 <p className="text-xs text-[#606060]">{channeInfo?.subscribersCount}<span className="mx-2">subscribers</span></p>
                             </div>
-                            <button onClick={handleSubscription} className="w-[74px] text-xs h-7 rounded-full font-semibold text-white flex justify-center items-center bg-[#272727] px-2">{isSubscribed? "Subscribed" : "Subscribe"}</button>
+                            <button onClick={handleSubscription} className={`${isSubscribed ? "bg-[#000000] bg-opacity-5 hover:bg-opacity-10 text-black w-[120px] justify-around" : "bg-[#000000] w-[84px]"}  text-xs h-8 rounded-full font-semibold text-white flex justify-center items-center px-2`}>
+                                {isSubscribed? (isBelled ? <div  onClick={() => setIsBelled(!isBelled)}><i class="fa-solid fa-bell"></i>Unsubscribe</div> : <><i class="fa-regular fa-bell"></i>Unsubscribe</>) : "Subscribe"}
+                            </button>
                         </div>
                         <div className="options flex space-x-2 h-full text-xs w-fit items-center">
                             <div className="like-dislike flex">

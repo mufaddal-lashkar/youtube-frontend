@@ -39,7 +39,7 @@ const Navbar = () => {
         <div className="container h-full justify-between flex">
             <div className="flex h-full w-[185px] items-center px-6 space-x-4">
                 <i className="fa-solid fa-bars text-[#030303]"></i>
-                <h1>TubeFlix</h1>
+                <h1>FlickFeed</h1>
             </div>
             <div className="h-full w-[632px] flex items-center">
                 <div className="flex items-center">
