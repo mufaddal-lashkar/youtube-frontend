@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { server } from "../conf";
 import { Comment } from "../components";
+import { BiBell, BiSolidBellRing, BiLike, BiSolidLike, BiDislike, BiSolidDislike } from "react-icons/bi"
 
 const Video = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))) 
@@ -125,19 +126,29 @@ const Video = () => {
         currentUserisSubscribed()
     }
     const currentUserisSubscribed = async () => {
-        const apiUrl = `${server}/users/isSubscribed/${video?.owner._id}`
+        const channelId = video?.owner._id
+        const apiUrl = `${server}/subscriptions/isSubscribed/${channelId}`
         const data = {
             userId: user?.user._id
         }
         const response = await axios.post(apiUrl,data)
         // console.log(response.data.data);
         setIsSubscribed(response.data.data)
+        setIsBelled(response.data?.message[0]?.isBelled || false)
+    }
+    const handleBellToggle = async () => {
+        const channelId = video?.owner._id
+        const userId = user.user._id
+        const apiUrl = `${server}/subscriptions/u/${userId}/c/${channelId}`
+        const response = await axios.post(apiUrl)
+        setIsBelled(response.data.data.isBelled);
+
     }
 
     // function to handle channel info
     const [channeInfo, setChannelInfo] = useState()
     const getChannelInfo = async () => {
-        const apiUrl = `${server}/users/c/${video?.owner._id}`
+        const apiUrl = `${server}/users/c/${video?.owner.username}`
         const response = await axios.get(apiUrl)
         // console.log(response.data.data);
         setChannelInfo(response.data.data)
@@ -148,16 +159,47 @@ const Video = () => {
     },[video])
 
     // function to handle likes
+    const [vidLikesCount, setVidLikesCount] = useState(0)
+    const [isVideoLike, setIsVideoLike] = useState(false)
+    const [isVideoDislike, setIsVideoDislike] = useState(false)
     useEffect(() => {
         getVideoLikes()
+        VideoLikedByCurrentUser()
     },[video])
     const getVideoLikes = async () => {
         const apiUrl = `${server}/likes/video-likes/v/${videoId}`
         const response = await axios.get(apiUrl)
-        console.log(response.data.data);
+        console.log(response.data);
+        const count = response.data.data
+        setVidLikesCount(count.length)
+        // console.log(count.length)
     }
-    const handleVideoLike = async () => {
-        
+    const handleVideoLikeToggle = async () => {
+        const apiUrl = `${server}/likes/toggle/v/${videoId}`
+        const data = {
+            userId: user.user._id
+        }
+        const response = await axios.post(apiUrl, data)
+        setIsVideoLike(response.data.data)
+        console.log(response.data.data)
+        getVideoLikes()
+        VideoLikedByCurrentUser()
+        if(isVideoDislike == true) {
+            setIsVideoDislike(false)
+        }
+    }
+    const handleVideoDislikeToggle = async () => {
+        setIsVideoDislike(!isVideoDislike)
+        handleVideoLikeToggle()
+    }
+    const VideoLikedByCurrentUser = async () => {
+        const apiUrl = `${server}/likes/isVideoLikedByCurrentUser/v/${videoId}`
+        const data = {
+            userId: user.user._id
+        }
+        const response = await axios.post(apiUrl, data)
+        // console.log(response.data.data);
+        setIsVideoLike(response.data.data)
     }
 
     // functions to handle sharing
@@ -251,7 +293,7 @@ const Video = () => {
                         <button className="w-12 h-12 bg-black bg-opacity-5 text-2xl rounded-lg hover:bg-opacity-10" onClick={() => handleShareInstagram()}><i className="fa-brands fa-twitter"></i></button>
                     </div>
                     <button className="absolute top-1 right-2 text-2xl rounded-full bg-black bg-opacity-5 w-10 h-10 hover:bg-opacity-10" onClick={() => setShowShareModal(false)}>
-                            <i class="fa-solid fa-xmark"></i>
+                            <i className="fa-solid fa-xmark"></i>
                     </button>
                 </div>
             </div>
@@ -283,14 +325,41 @@ const Video = () => {
                                 <p className="font-medium">{channeInfo?.username}</p>
                                 <p className="text-xs text-[#606060]">{channeInfo?.subscribersCount}<span className="mx-2">subscribers</span></p>
                             </div>
-                            <button onClick={handleSubscription} className={`${isSubscribed ? "bg-[#000000] bg-opacity-5 hover:bg-opacity-10 text-black w-[120px] justify-around" : "bg-[#000000] w-[84px]"}  text-xs h-8 rounded-full font-semibold text-white flex justify-center items-center px-2`}>
-                                {isSubscribed? (isBelled ? <div  onClick={() => setIsBelled(!isBelled)}><i class="fa-solid fa-bell"></i>Unsubscribe</div> : <><i class="fa-regular fa-bell"></i>Unsubscribe</>) : "Subscribe"}
+                            <button
+                                onClick={handleSubscription}
+                                className={`${
+                                    isSubscribed
+                                    ? 'bg-[#000000] bg-opacity-5 hover:bg-opacity-10 text-black w-[120px] justify-around'
+                                    : 'bg-[#000000] w-[84px] text-white'
+                                } text-xs h-8 rounded-full font-semibold flex justify-center items-center px-2`}
+                                >
+                                {isSubscribed ? (
+                                    isBelled ? (
+                                    <div className="flex items-center" >
+                                        <BiSolidBellRing className="mr-1 text-base" onClick={(e) => {
+                                            e.stopPropagation()
+                                            setIsBelled(!isBelled)
+                                        }} />
+                                        <span>Unsubscribe</span>
+                                    </div>
+                                    ) : (
+                                    <div className="flex items-center">
+                                        <BiBell className="mr-1 text-base" onClick={(e) => {
+                                            e.stopPropagation()
+                                            setIsBelled(!isBelled)
+                                        }} />
+                                        <span>Unsubscribe</span>
+                                    </div>
+                                    )
+                                ) : (
+                                    'Subscribe'
+                                )}
                             </button>
                         </div>
                         <div className="options flex space-x-2 h-full text-xs w-fit items-center">
                             <div className="like-dislike flex">
-                                <button className="w-16 h-7 bg-[#000000] bg-opacity-5 hover:bg-opacity-10 flex justify-center items-center rounded-l-full"><i className="fa-regular fa-thumbs-up "></i></button>
-                                <button className="w-12 h-7 bg-[#000000] bg-opacity-5 hover:bg-opacity-10 flex justify-center items-center rounded-r-full border-l border-[#ccc]"><i className="fa-regular fa-thumbs-down "></i></button>
+                                <button onClick={() => handleVideoLikeToggle()} className="w-16 h-7 bg-[#000000] bg-opacity-5 hover:bg-opacity-10 flex justify-center items-center rounded-l-full space-x-1.5">{isVideoLike?(<BiSolidLike className="text-base"/>):(<BiLike className="text-base"/>)}<span>{vidLikesCount}</span></button>
+                                <button onClick={() => handleVideoDislikeToggle()} className="w-12 h-7 bg-[#000000] bg-opacity-5 hover:bg-opacity-10 flex justify-center items-center rounded-r-full border-l border-[#ccc]">{isVideoDislike?(<BiSolidDislike className="text-base"/>):(<BiDislike className="text-base"/>)}</button>
                             </div>
                             <button onClick={handleShare} className="w-[68px] h-7 rounded-full flex justify-center space-x-3 items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><i className="fa-solid fa-share"></i><span>Share</span></button>
                             <a href={video?.videoFile} download className="w-[92px] h-7 rounded-full flex justify-center space-x-3 items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><i className="fa-solid fa-download"></i><span>Download</span></a>
@@ -330,7 +399,7 @@ const Video = () => {
                 </div> 
             </div>
             <div className="right-panel h-full w-[30%] p-6 bg-slate-600">
-
+                
             </div>
         </div>
         </>
