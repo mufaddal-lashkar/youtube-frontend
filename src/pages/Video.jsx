@@ -3,6 +3,10 @@ import axios from "axios";
 import { server } from "../conf";
 import { Comment } from "../components";
 import { BiBell, BiSolidBellRing, BiLike, BiSolidLike, BiDislike, BiSolidDislike } from "react-icons/bi"
+import { FaShare, FaRegBookmark, FaBookmark  } from "react-icons/fa6";
+import { IoMdDownload } from "react-icons/io";
+import { HiDotsHorizontal } from "react-icons/hi";
+
 
 const Video = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))) 
@@ -142,7 +146,6 @@ const Video = () => {
         const apiUrl = `${server}/subscriptions/u/${userId}/c/${channelId}`
         const response = await axios.post(apiUrl)
         setIsBelled(response.data.data.isBelled);
-
     }
 
     // function to handle channel info
@@ -161,7 +164,6 @@ const Video = () => {
     // function to handle likes
     const [vidLikesCount, setVidLikesCount] = useState(0)
     const [isVideoLike, setIsVideoLike] = useState(false)
-    const [isVideoDislike, setIsVideoDislike] = useState(false)
     useEffect(() => {
         getVideoLikes()
         VideoLikedByCurrentUser()
@@ -169,10 +171,10 @@ const Video = () => {
     const getVideoLikes = async () => {
         const apiUrl = `${server}/likes/video-likes/v/${videoId}`
         const response = await axios.get(apiUrl)
-        console.log(response.data);
-        const count = response.data.data
-        setVidLikesCount(count.length)
-        // console.log(count.length)
+        setVidLikesCount(response.data.data)
+        // .then((res) => console.log("HELLLOOOO",response.data))
+        // .catch((err) => console.log("HELLOO ERROR",err))
+        
     }
     const handleVideoLikeToggle = async () => {
         const apiUrl = `${server}/likes/toggle/v/${videoId}`
@@ -183,14 +185,10 @@ const Video = () => {
         setIsVideoLike(response.data.data)
         console.log(response.data.data)
         getVideoLikes()
-        VideoLikedByCurrentUser()
-        if(isVideoDislike == true) {
-            setIsVideoDislike(false)
+        if(isVideoDislike) {
+            handleVideoDislikeToggle()
         }
-    }
-    const handleVideoDislikeToggle = async () => {
-        setIsVideoDislike(!isVideoDislike)
-        handleVideoLikeToggle()
+        
     }
     const VideoLikedByCurrentUser = async () => {
         const apiUrl = `${server}/likes/isVideoLikedByCurrentUser/v/${videoId}`
@@ -201,6 +199,35 @@ const Video = () => {
         // console.log(response.data.data);
         setIsVideoLike(response.data.data)
     }
+
+    // function to handle dislike
+    const [vidDislikesCount, setVidDislikesCount] = useState(0)
+    const [isVideoDislike, setIsVideoDislike] = useState(false)
+    useEffect(() => {
+        VideoDisikedByCurrentUser()
+    },[video])
+    const handleVideoDislikeToggle = async () => {
+        const apiUrl = `${server}/dislikes/toggle/v/${videoId}`
+        const data = {
+            userId: user.user._id
+        }
+        const response = await axios.post(apiUrl, data)
+        console.log(response.data.data);
+        setIsVideoDislike(response.data.data)
+        if (isVideoLike) {
+            handleVideoLikeToggle()
+        }
+    }
+    const VideoDisikedByCurrentUser = async () => {
+        const apiUrl = `${server}/dislikes/isVideoDislikedByCurrentUser/v/${videoId}`
+        const data = {
+            userId: user.user._id
+        }
+        const response = await axios.post(apiUrl, data)
+        // console.log(response.data.data);
+        setIsVideoDislike(response.data.data)
+    }
+
 
     // functions to handle sharing
     const [showShareModal, setShowShareModal] = useState(false);
@@ -301,7 +328,7 @@ const Video = () => {
         <div className="container h-[100vh] w-full flex overflow-y-scroll overflow-x-hidden">
             <div className="left-panel h-full w-[70%] p-6">
                 <div className="video-container rounded-2xl relative overflow-hidden w-full">
-                    <video onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} id="main-vid" controls src={video?.videoFile} alt="Video" autoPlay className="w-full duration-300 ease-in-out"></video>
+                    <video controlsList="nodownload" onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} id="main-vid" controls src={video?.videoFile} alt="Video" autoPlay className="w-full duration-300 ease-in-out"></video>
                     <div onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} className={`additional-controls opacity-${customVidControlsOpacity} absolute top-1/2 transform -translate-y-1/2 w-full h-[30%] p-4 flex items-center justify-evenly`}>
                         <button onClick={() => forward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
                             <span><i className="fa-solid fa-backward "></i></span>
@@ -338,7 +365,7 @@ const Video = () => {
                                     <div className="flex items-center" >
                                         <BiSolidBellRing className="mr-1 text-base" onClick={(e) => {
                                             e.stopPropagation()
-                                            setIsBelled(!isBelled)
+                                            handleBellToggle()
                                         }} />
                                         <span>Unsubscribe</span>
                                     </div>
@@ -346,7 +373,7 @@ const Video = () => {
                                     <div className="flex items-center">
                                         <BiBell className="mr-1 text-base" onClick={(e) => {
                                             e.stopPropagation()
-                                            setIsBelled(!isBelled)
+                                            handleBellToggle()
                                         }} />
                                         <span>Unsubscribe</span>
                                     </div>
@@ -361,10 +388,10 @@ const Video = () => {
                                 <button onClick={() => handleVideoLikeToggle()} className="w-16 h-7 bg-[#000000] bg-opacity-5 hover:bg-opacity-10 flex justify-center items-center rounded-l-full space-x-1.5">{isVideoLike?(<BiSolidLike className="text-base"/>):(<BiLike className="text-base"/>)}<span>{vidLikesCount}</span></button>
                                 <button onClick={() => handleVideoDislikeToggle()} className="w-12 h-7 bg-[#000000] bg-opacity-5 hover:bg-opacity-10 flex justify-center items-center rounded-r-full border-l border-[#ccc]">{isVideoDislike?(<BiSolidDislike className="text-base"/>):(<BiDislike className="text-base"/>)}</button>
                             </div>
-                            <button onClick={handleShare} className="w-[68px] h-7 rounded-full flex justify-center space-x-3 items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><i className="fa-solid fa-share"></i><span>Share</span></button>
-                            <a href={video?.videoFile} download className="w-[92px] h-7 rounded-full flex justify-center space-x-3 items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><i className="fa-solid fa-download"></i><span>Download</span></a>
-                            <button className="w-[68px] h-7 rounded-full flex justify-center space-x-3 items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><i className="fa-regular fa-bookmark"></i><span>Save</span></button>
-                            <button className="w-7 h-7 rounded-full flex justify-center items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><i className="fa-solid fa-ellipsis"></i></button>
+                            <button onClick={handleShare} className="w-[68px] h-7 rounded-full flex justify-center items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><FaShare className="text-sm mr-1"/><span>Share</span></button>
+                            <a href={video?.videoFile} download className="w-[92px] h-7 rounded-full flex justify-center items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><IoMdDownload className="text-base mr-1" /><span>Download</span></a>
+                            <button className="w-[68px] h-7 rounded-full flex justify-center items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><FaRegBookmark className="text-sm mr-1"/><span>Save</span></button>
+                            <button className="w-7 h-7 rounded-full flex justify-center items-center bg-[#000000] bg-opacity-5 hover:bg-opacity-10"><HiDotsHorizontal className="text-base"/></button>
                         </div>
                     </div>
                     <div className="video-description bg-[#000000] bg-opacity-5 w-full h-auto p-2 rounded-xl text-xs text-[#0f0f0f] mt-3">
@@ -377,7 +404,7 @@ const Video = () => {
                             <img className="w-[38px] h-[38px] rounded-full" src={user?.user.avatar} alt="avatar" />
                             <div className="w-[calc(100%_-_38px)] px-4 space-y-3">
                                 <input value={commentText} onChange={(e) => setCommentText(e.target.value)} className="border-b outline-none w-full border-[#616161]" type="text" />
-                                <div className="buttons flex justify-end">
+                                <div className="buttons flex justify-end space-x-3">
                                     <button onClick={cancelComment} className="w-[74px] h-[36px] bg-black bg-opacity-5 rounded-full hover:bg-opacity-10">Cancel</button>
                                     <button onClick={postComment} className="w-[93px] h-[36px] rounded-full text-white font-medium bg-[#065fd4] disabled:bg-black disabled:bg-opacity-10 disabled:font-normal disabled:text-black" disabled={submitDisabled} >Comment</button>
                                 </div>
@@ -387,6 +414,7 @@ const Video = () => {
                             {comments?.map((com) => {
                                 return <Comment 
                                     key={com._id}
+                                    commentId={com._id}
                                     content={com.content}
                                     avatar={com.owner.avatar}
                                     username={com.owner.username}
