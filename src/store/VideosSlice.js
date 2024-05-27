@@ -6,7 +6,7 @@ export const getVideos = createAsyncThunk(
     'videos/getVideos',
     async (page) => {
         // localStorage.removeItem('videos')
-        const request = await axios.get(`${server}/videos/get-all-videos?page=${page}&limit=20`)
+        const request = await axios.get(`${server}/videos/get-all-videos?page=${page}&limit=50`)
         // console.log(request);
         const response = await request.data.data
         // console.log(response);

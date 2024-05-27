@@ -41,7 +41,7 @@ const HomeVideo = ({
         } else {
             return { value: seconds, unit: 'second' + (seconds > 1 ? 's' : '') };
         }
-    }
+    } 
     const ago = getTimeDifference(uploaded);
 
     // function to convert seconds into mins

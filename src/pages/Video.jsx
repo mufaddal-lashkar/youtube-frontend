@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import axios from "axios";
 import { server } from "../conf";
 import { Comment } from "../components";
@@ -347,11 +348,13 @@ const Video = () => {
                     <p className="text-base font-bold ">{video?.title}</p>
                     <div className="channel-options w-full flex justify-between my-2 h-11">
                         <div className="channel-info flex h-full items-center w-fit">
-                            <img className="w-[38px] h-[38px] rounded-full" src={channeInfo?.avatar} alt="channel-avatar" />
-                            <div className="flex flex-col justify-center mx-3">
-                                <p className="font-medium">{channeInfo?.username}</p>
-                                <p className="text-xs text-[#606060]">{channeInfo?.subscribersCount}<span className="mx-2">subscribers</span></p>
-                            </div>
+                            <Link to={{ pathname: '/channel', search: `?${video?.owner._id}` }} className="flex cursor-pointer">
+                                <img className="w-[38px] h-[38px] rounded-full" src={channeInfo?.avatar} alt="channel-avatar" />
+                                <div className="flex flex-col justify-center mx-3">
+                                    <p className="font-medium">{channeInfo?.username}</p>
+                                    <p className="text-xs text-[#606060]">{channeInfo?.subscribersCount}<span className="mx-2">subscribers</span></p>
+                                </div>
+                            </Link>
                             <button
                                 onClick={handleSubscription}
                                 className={`${
