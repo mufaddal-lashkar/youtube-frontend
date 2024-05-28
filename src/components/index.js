@@ -13,5 +13,5 @@ export {
     Navbar,
     ProtectedRoute,
     HomeVideo,
-    Comment
+    Comment,
 }

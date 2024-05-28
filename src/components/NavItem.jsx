@@ -1,5 +1,5 @@
 import React from "react"
-import { Link, NavLink } from "react-router-dom"
+import { NavLink } from "react-router-dom"
 
 const NavItem = ({
     text,
@@ -8,7 +8,7 @@ const NavItem = ({
 }) => {
 
     return (
-        <NavLink to={to} className={`container rounded-xl w-[180px] text-[#0f0f0f] h-10 px-3.5 space-x-5 hover:bg-[#000] hover:bg-opacity-5 bg-white flex items-center`}>
+        <NavLink to={to} className={({isActive}) => `container ${isActive ? "font-bold" : ""} rounded-xl w-[180px] text-[#0f0f0f] h-10 px-3.5 space-x-5 hover:bg-[#000] hover:bg-opacity-5 bg-white flex items-center`}>
             <div>
                 {icon}
             </div>

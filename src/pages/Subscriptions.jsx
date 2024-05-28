@@ -78,24 +78,24 @@ const Subscriptions = () => {
                         <button onClick={scrollRight} className="rounded-full h-9 w-9 text-2xl flex justify-center items-center bg-black bg-opacity-5 hover:bg-opacity-10"><IoIosArrowForward /></button>
                     </div>
                     <div className="wrapper w-[100%] h-[calc(100%_-_94px)] overflow-y-scroll flex flex-col">
-                    <div className=" py-10 flex flex-wrap space-x-3">
-                        {videos?.map((vid) => {
-                            return <HomeVideo 
-                                    key={vid._id}
-                                    thumbnail={vid.thumbnail}
-                                    title={vid.title}
-                                    duration={vid.duration}
-                                    avatar={vid.owner.avatar}
-                                    channelName={vid.owner.username}
-                                    views={vid.views}
-                                    uploaded={vid.createdAt}
-                                    videoId={vid._id}
-                                />
-                            })
-                        }
+                        <div className=" py-10 flex flex-wrap space-x-3">
+                            {videos?.map((vid) => {
+                                return <HomeVideo 
+                                        key={vid._id}
+                                        thumbnail={vid.thumbnail}
+                                        title={vid.title}
+                                        duration={vid.duration}
+                                        avatar={vid.owner.avatar}
+                                        channelName={vid.owner.username}
+                                        views={vid.views}
+                                        uploaded={vid.createdAt}
+                                        videoId={vid._id}
+                                    />
+                                })
+                            }
+                        </div>
                     </div>
                 </div>
-            </div>
             ):(
                 <div className="container w-[100%] h-[100%] space-y-3 flex flex-col justify-center items-center">
                     <div className="flex text-8xl space-x-4"> 

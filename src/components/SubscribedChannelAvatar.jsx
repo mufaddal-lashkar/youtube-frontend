@@ -4,7 +4,7 @@ import { Link } from "react-router-dom"
 const SubscribedChannelAvatar = ({username,avatar,channelId}) => {
 
     return(
-        <Link to={{ pathname: '/channel', search: `?${channelId}` }} className="item w-14 h-full mx-2 flex flex-col justify-between">
+        <Link to={`/channel/${channelId}`} className="item w-14 h-full mx-2 flex flex-col justify-between">
             <div className="img-container overflow-hidden h-14 w-14 rounded-full">
                 <img src={avatar} alt="avatar" />
             </div>

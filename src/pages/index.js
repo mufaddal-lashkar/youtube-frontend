@@ -8,6 +8,12 @@ import Subscriptions from "./Subscriptions";
 import Search from "./Search";
 import Video from "./Video";
 import ChannelPage from "./ChannelPage";
+import ChannelTabHome from "./ChannelTabHome"
+import ChannelTabVideos from "./ChannelTabVideos"
+import ChannelTabShorts from "./ChannelTabShorts"
+import ChannelTabPlaylists from "./ChannelTabPlaylists"
+import ChannelTabTweets from "./ChannelTabTweets"
+import ChannelTabCommunity from "./ChannelTabCommunity"
 
 export {
     Home,
@@ -19,5 +25,11 @@ export {
     Subscriptions,
     Search,
     Video,
-    ChannelPage
+    ChannelPage,
+    ChannelTabHome,
+    ChannelTabVideos,
+    ChannelTabShorts,
+    ChannelTabPlaylists,
+    ChannelTabTweets,
+    ChannelTabCommunity
 }   

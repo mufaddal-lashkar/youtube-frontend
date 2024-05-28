@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { server } from "../conf";
 import { Comment } from "../components";
@@ -13,18 +13,9 @@ const Video = () => {
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user'))) 
 
     // function to extract video id from url
-    useEffect(() => {
-        const extractVideoIdFromUrl = () => {
-        const currentUrl = window.location.href;
-        const questionMarkIndex = currentUrl.indexOf('?');
-        const queryString = currentUrl.slice(questionMarkIndex + 1);
-        setVideoId(queryString)
-        };
-        extractVideoIdFromUrl();
-    }, []);
+    const { videoId } = useParams()
 
     // function to handle video
-    const [videoId, setVideoId] = useState();
     const [video, setVideo] = useState();
     useEffect(() => {
         if(videoId) {
@@ -151,8 +142,9 @@ const Video = () => {
 
     // function to handle channel info
     const [channeInfo, setChannelInfo] = useState()
+    // console.log(channeInfo);
     const getChannelInfo = async () => {
-        const apiUrl = `${server}/users/c/${video?.owner.username}`
+        const apiUrl = `${server}/users/c/${video?.owner._id}`
         const response = await axios.get(apiUrl)
         // console.log(response.data.data);
         setChannelInfo(response.data.data)
@@ -349,9 +341,9 @@ const Video = () => {
                     <div className="channel-options w-full flex justify-between my-2 h-11">
                         <div className="channel-info flex h-full items-center w-fit">
                             <Link to={{ pathname: '/channel', search: `?${video?.owner._id}` }} className="flex cursor-pointer">
-                                <img className="w-[38px] h-[38px] rounded-full" src={channeInfo?.avatar} alt="channel-avatar" />
+                                <img className="w-[38px] h-[38px] rounded-full" src={video?.owner.avatar} alt="channel-avatar" />
                                 <div className="flex flex-col justify-center mx-3">
-                                    <p className="font-medium">{channeInfo?.username}</p>
+                                    <p className="font-medium">{video?.owner.username}</p>
                                     <p className="text-xs text-[#606060]">{channeInfo?.subscribersCount}<span className="mx-2">subscribers</span></p>
                                 </div>
                             </Link>
@@ -413,19 +405,27 @@ const Video = () => {
                                 </div>
                             </div>
                         </div>
-                        <div className="all-comments">
-                            {comments?.map((com) => {
-                                return <Comment 
-                                    key={com._id}
-                                    commentId={com._id}
-                                    content={com.content}
-                                    avatar={com.owner.avatar}
-                                    username={com.owner.username}
-                                    ownerId={com.owner._id}
-                                    createdAt={com.createdAt}
-                                />
-                            })}
-                        </div>
+                        {
+                            comments?(
+                                <div className="all-comments">
+                                    {comments?.map((com) => {
+                                        return <Comment 
+                                            key={com._id}
+                                            commentId={com._id}
+                                            content={com.content}
+                                            avatar={com.owner.avatar}
+                                            username={com.owner.username}
+                                            ownerId={com.owner._id}
+                                            createdAt={com.createdAt}
+                                        />
+                                    })}
+                                </div>
+                            ):(
+                                <div className="w-full h-20 flex justify-center items-start">
+                                    <p className="text-2xl font-medium text-[#272727]">No comments on this video yet</p>
+                                </div>
+                            )
+                        }
                     </div>
                 </div> 
             </div>
