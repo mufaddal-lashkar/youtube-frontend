@@ -1,53 +1,37 @@
 import React,{useState, useEffect} from "react";
-import { getSearchVideos } from "../store/VideosSlice";
-import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
 import { HomeVideo } from "../components/index"
+import { server } from "../conf";
+import axios from "axios";
 
 
 const Search = () => {
 
-    // Initialize videos state as an empty array
-    const [videos, setVideos] = useState([]); 
-    const [page, setPage] = useState(1)
+    const { searchText } = useParams()
+    const [videos, setVideos] = useState([])
 
-    const [searchTerm, setSearchTerm] = useState("");
     useEffect(() => {
-        const storedQuery = localStorage.getItem('query');
-        if (storedQuery) {
-            setSearchTerm(storedQuery);
-            console.log(searchTerm);
+        getSearchVideos()
+    },[searchText])
+    const getSearchVideos = async () => {
+        const apiUrl = `${server}/videos/get-search-videos`
+        const data = {
+            input: searchText
         }
-    }, []);
+        await axios.post(apiUrl, data)
+        .then((res) => {
+            setVideos(res.data.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
+    }
 
-    const dispatch = useDispatch()
-    useEffect(() => {
-        const serachVid = () => {
-            console.log(searchTerm);
-            const params = {
-                page: 1,
-                limit: 10,
-                query: '20'
-              };
-            
-            dispatch(getSearchVideos(params))
-                .then((response) => {
-                    console.log(response.payload);
-                    setVideos(response.payload)
-                })
-                .catch((error) => {
-                    console.error("Error fetching videos:", error);
-                });
-        };
-        serachVid();
-        console.log(videos);
-    }, [dispatch, page]);
     
 
     return(
         <div className="wrapper w-[100%] h-[100vh] overflow-y-scroll flex flex-col">
             <div className=" py-10 flex flex-wrap space-x-3 ">
-                {/* <button onClick={getHomeVideos}>Click</button>
-                <button onClick={handleLogout}>Logout</button> */}
                 {
                     videos?.map((vid) => {
                         return <HomeVideo 
@@ -55,18 +39,14 @@ const Search = () => {
                                 thumbnail={vid.thumbnail} 
                                 title={vid.title} 
                                 duration={vid.duration}
-                                channelName={vid.owner[0].username}
-                                avatar={vid.owner[0].avatar}
+                                channelName={vid.owner.username}
+                                avatar={vid.owner.avatar}
                                 views={vid.views}
                                 uploaded={vid.createdAt}
+                                videoId={vid._id}
                                 />
                     })
                 }
-                <button onClick={() => {
-                    setPage(page + 1)
-                    getHomeVideos()
-                    window.location.reload()
-                }}>Show more</button>
             </div>
         </div>
     )

@@ -30,9 +30,7 @@ const Navbar = () => {
         if (searchText === "") {
             alert("Enter keywords for search")
         } else {
-            localStorage.setItem('query', searchText)
-            navigate('/search')
-            window
+            navigate(`/search/${searchText}`)
         }   
     }
 

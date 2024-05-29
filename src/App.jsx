@@ -16,7 +16,7 @@ function App() {
                 <Route path='profile' element={<ProtectedRoute><Profile /></ProtectedRoute>}/>
                 <Route path='shorts' element={<ProtectedRoute><Shorts /></ProtectedRoute>}/>
                 <Route path='subscriptions' element={<ProtectedRoute><Subscriptions /></ProtectedRoute>}/>
-                <Route path='search' element={<ProtectedRoute><Search /></ProtectedRoute>}/>
+                <Route path='search/:searchText' element={<ProtectedRoute><Search /></ProtectedRoute>}/>
                 <Route path='video/:videoId' element={<ProtectedRoute><Video /></ProtectedRoute>}/>
                 <Route path='channel/:channelId' element={<ProtectedRoute><ChannelPage /></ProtectedRoute>}>
                   <Route path='home' element={<ProtectedRoute><ChannelTabHome /></ProtectedRoute>}/>
