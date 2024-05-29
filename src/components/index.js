@@ -5,6 +5,8 @@ import SideNav from "./SideNav"
 import Navbar from "./Navbar"
 import HomeVideo from "./HomeVideo"
 import Comment from "./Comment"
+import VideoCardChannelTab from "./VideoCardChannelTab"
+import VideoCardRelatedVideo from "./VideoCardRelatedVideo"
 
 export {
     InputField,
@@ -14,4 +16,6 @@ export {
     ProtectedRoute,
     HomeVideo,
     Comment,
+    VideoCardChannelTab,
+    VideoCardRelatedVideo
 }

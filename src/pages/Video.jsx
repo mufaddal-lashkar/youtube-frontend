@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 import { server } from "../conf";
-import { Comment } from "../components";
+import { Comment, VideoCardRelatedVideo } from "../components";
 import { BiBell, BiSolidBellRing, BiLike, BiSolidLike, BiDislike, BiSolidDislike } from "react-icons/bi"
 import { FaShare, FaRegBookmark, FaBookmark  } from "react-icons/fa6";
 import { IoMdDownload } from "react-icons/io";
@@ -29,7 +29,7 @@ const Video = () => {
             // console.log(response.data.data);
             setVideo(response.data.data)
         } catch (error) {
-            console.error("Error fetching video:", error);
+            // console.error("Error fetching video:", error);
         }
     }
     function getTimeDifference(createdAt) {
@@ -75,7 +75,7 @@ const Video = () => {
             "userId": user.user._id
         }
         const response = await axios.post(apiUrl, data)
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setCommentText("")
         getVideoComments()
     }
@@ -102,7 +102,7 @@ const Video = () => {
                 // console.log(response.data.data);
                 setComments(response.data.data)
             } catch (error) {
-                console.log("Error while fetching comments", error);
+                // console.log("Error while fetching comments", error);
             }
         }
     }
@@ -127,17 +127,27 @@ const Video = () => {
         const data = {
             userId: user?.user._id
         }
-        const response = await axios.post(apiUrl,data)
+        await axios.post(apiUrl,data)
+        .then((res) => {
+            setIsSubscribed(res.data.data)
+            setIsBelled(res.data?.message[0]?.isBelled || false)
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
         // console.log(response.data.data);
-        setIsSubscribed(response.data.data)
-        setIsBelled(response.data?.message[0]?.isBelled || false)
     }
     const handleBellToggle = async () => {
         const channelId = video?.owner._id
         const userId = user.user._id
         const apiUrl = `${server}/subscriptions/u/${userId}/c/${channelId}`
-        const response = await axios.post(apiUrl)
-        setIsBelled(response.data.data.isBelled);
+        await axios.post(apiUrl)
+        .then((res) => {
+            setIsBelled(res.data.data.isBelled);
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
     }
 
     // function to handle channel info
@@ -145,9 +155,14 @@ const Video = () => {
     // console.log(channeInfo);
     const getChannelInfo = async () => {
         const apiUrl = `${server}/users/c/${video?.owner._id}`
-        const response = await axios.get(apiUrl)
+        await axios.get(apiUrl)
+        .then((response) => {
+            setChannelInfo(response.data.data)
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
         // console.log(response.data.data);
-        setChannelInfo(response.data.data)
     }
     useEffect(() => {
         getChannelInfo()
@@ -176,7 +191,7 @@ const Video = () => {
         }
         const response = await axios.post(apiUrl, data)
         setIsVideoLike(response.data.data)
-        console.log(response.data.data)
+        // console.log(response.data.data)
         getVideoLikes()
         if(isVideoDislike) {
             handleVideoDislikeToggle()
@@ -205,7 +220,7 @@ const Video = () => {
             userId: user.user._id
         }
         const response = await axios.post(apiUrl, data)
-        console.log(response.data.data);
+        // console.log(response.data.data);
         setIsVideoDislike(response.data.data)
         if (isVideoLike) {
             handleVideoLikeToggle()
@@ -245,7 +260,7 @@ const Video = () => {
     if (appShareUrls.hasOwnProperty(appName)) {
         window.open(appShareUrls[appName], '_blank');
     } else {
-        console.error(`Sharing via ${appName} is not supported.`);
+        // console.error(`Sharing via ${appName} is not supported.`);
     }
     setShowShareModal(false);
     }
@@ -254,7 +269,7 @@ const Video = () => {
         if (isInstagramAppAvailable) {
             window.location.href = 'instagram://story';
         } else {
-            console.error('Instagram app is not available on this device.');
+            // console.error('Instagram app is not available on this device.');
         }
         setShowShareModal(false);
     };
@@ -290,11 +305,29 @@ const Video = () => {
     useEffect(() => {
         if (!mainVideo) return;
         mainVideo.addEventListener('ended', handleVideoEnded);
-    
         return () => {
           mainVideo.removeEventListener('ended', handleVideoEnded);
         };
     }, []);
+
+    // function to get related videos
+    const [relatedVideos, setRelatedVideos] = useState([])
+    useEffect(() => {
+        getRelatedVideos()
+    },[video])
+    const getRelatedVideos = async () => {
+        const apiUrl = `${server}/videos/related-videos`
+        const data = {
+            input: video?.title
+        }
+        await axios.post(apiUrl, data)
+        .then((res) => {
+            setRelatedVideos(res.data.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
+    }
     
     return ( 
         <>
@@ -429,8 +462,29 @@ const Video = () => {
                     </div>
                 </div> 
             </div>
-            <div className="right-panel h-full w-[30%] p-6 bg-slate-600">
-                
+            <div className="right-panel h-full w-[30%] p-6">
+                <div className="related">
+                    <div className="text-xl font-bold text-[#272727] mb-4">Related videos</div>
+                </div>
+                {relatedVideos?(
+                    relatedVideos.map((video) => {
+                        return <VideoCardRelatedVideo 
+                            key={video._id}
+                            thumbnail={video.thumbnail}
+                            title={video.title}
+                            duration={video.duration}
+                            avatar={video.owner.avatar}
+                            channelName={video.owner.username}
+                            views={video.views}
+                            uploaded={video.createdAt}
+                            videoId={video._id}
+                        />
+                    })
+                ):(
+                    <div className="container">
+                        <p>No related video found</p>
+                    </div>
+                )}
             </div>
         </div>
         </>

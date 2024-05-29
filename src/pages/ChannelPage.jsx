@@ -78,7 +78,7 @@ const ChannelPage = () => {
         };
         
     return (
-        <div className="container w-[100%] h-[100vh] px-14">
+        <div className="container w-[100%] h-[100vh] px-14 overflow-y-scroll">
             <div className="coverImg-container w-full h-[200px] rounded-xl overflow-hidden">
                 <img className="w-[100%] h-full" src={channel?.coverImage} alt="coverImg" />
             </div>
@@ -131,7 +131,7 @@ const ChannelPage = () => {
                 <NavLink to={"home"} className={({ isActive }) => `${isActive ? "font-semibold text-[#272727] border-b-2 border-[#272727]" : "text-[#272727]"} `}>
                     <h1>Home</h1>
                 </NavLink>
-                <NavLink to={"videos"} videos={videos} className={({ isActive }) => `${isActive ? "font-semibold text-[#272727] border-b-2 border-[#272727]" : "text-[#272727]"} pb-4`}>
+                <NavLink to={"videos"} className={({ isActive }) => `${isActive ? "font-semibold text-[#272727] border-b-2 border-[#272727]" : "text-[#272727]"} pb-4`}>
                     <h1>Videos</h1>
                 </NavLink>
                 <NavLink to={"shorts"} className={({ isActive }) => `${isActive ? "font-semibold text-[#272727] border-b-2 border-[#272727]" : "text-[#272727]"} pb-4`}>
@@ -148,7 +148,9 @@ const ChannelPage = () => {
                 </NavLink>
             </div>
             <hr className="h-[1.5px] w-full bg-[#ccc] mb-4"/>
-            <Outlet />
+            <div className="w-full overflow-hidden">
+                <Outlet />  
+            </div>
         </div>
     )
 }

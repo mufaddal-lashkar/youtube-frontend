@@ -53,7 +53,7 @@ const HomeVideo = ({
     const  minAndSec = secondsToMinutes(duration)
 
     return (
-        <Link to={`/video/${videoId}`} className="container w-full sm:w-[320px] h-auto text-[10px] block">
+        <Link to={`/video/${videoId}`} className="container w-full sm:min-w-[280px] h-auto text-[10px] block">
             <div className="thumbnail w-full h-[180px] sm:h-[180px] relative overflow-hidden rounded-xl">
                 <img src={thumbnail} alt="thumbnail" className="w-full h-full object-cover" />
                 <div className="duration m-2 absolute right-0 bottom-0 bg-[#252525] flex justify-center items-center text-xs text-white py-1 px-2 rounded-lg">

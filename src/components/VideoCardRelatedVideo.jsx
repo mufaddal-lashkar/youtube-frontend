@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
+import { LuDot } from "react-icons/lu";
 import { Link } from "react-router-dom";
 
-const HomeVideo = ({
+const VideoCardRelatedVideo = ({
     thumbnail,
     title,
     duration,
@@ -52,21 +53,28 @@ const HomeVideo = ({
     }
     const  minAndSec = secondsToMinutes(duration)
 
-    return (
-        <Link to={`/video/${videoId}`} className="container w-full sm:w-[320px] h-auto text-[10px] block">
-            <div className="thumbnail w-full h-[180px] sm:h-[180px] relative overflow-hidden rounded-xl">
+    return(
+        <Link to={`/video/${videoId}`} className="container w-full h-[72px] flex overflow-hidden my-3 hover:bg-black hover:bg-opacity-10">
+            <div className="thumbnail w-[40%] h-[72px] relative overflow-hidden rounded-xl">
                 <img src={thumbnail} alt="thumbnail" className="w-full h-full object-cover" />
-                <div className="duration m-2 absolute right-0 bottom-0 bg-[#252525] flex justify-center items-center text-xs text-white py-1 px-2 rounded-lg">
+                <div className="duration m-2 absolute right-0 bottom-0 bg-[#252525] flex justify-center items-center text-xs text-white rounded-lg">
                 <p>{minAndSec}</p>
                 </div>
             </div>
-            <div className="details w-full h-auto sm:h-[140px] flex space-x-3 py-3">
+            <div className="details w-[60%] h-[72px] flex flex-col px-2 justify-around">
+                <p className="text-sm line-clamp-2 font-medium">{title} </p>
+                <div className="">
+                    <p className="text-xs text-[#606060]">{channelName}</p>
+                    <p className="text-xs flex text-[#606060]"><span>{views} views</span><span className="flex justify-center items-center"><LuDot /></span><span>{`${ago.value} ${ago.unit} ago`}</span></p>
+                </div>
+            </div>
+            {/* <div className="details w-full h-auto sm:h-[140px] flex space-x-3 py-3">
                 <div className="avatar w-[36px] flex-shrink-0">
                 <img src={avatar} alt="avatar" className="rounded-full w-[36px] h-[36px] object-cover" />
                 </div>
                 <div className="info flex-grow text-xs overflow-hidden">
                 <div className="mb-1">
-                    <p className="font-semibold text-sm max-h-[40px] line-clamp-2">{title}</p>
+                    <p className="font-semibold text-sm max-h-[40px] overflow-hidden text-ellipsis">{title}</p>
                 </div>
                 <p>{channelName}</p>
                 <div className="flex space-x-4 text-gray-500">
@@ -74,9 +82,9 @@ const HomeVideo = ({
                     <p>{`${ago.value} ${ago.unit} ago`}</p>
                 </div>
                 </div>
-            </div>
+            </div> */}
         </Link>
     )
 }
 
-export default HomeVideo 
+export default VideoCardRelatedVideo
