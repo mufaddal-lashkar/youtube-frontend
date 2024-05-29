@@ -353,10 +353,10 @@ const Video = () => {
         )}
         <div className="container h-[100vh] w-full flex overflow-y-scroll overflow-x-hidden">
             <div className="left-panel h-full w-[70%] p-6">
-                <div className="video-container rounded-2xl relative overflow-hidden w-full">
-                    <video controlsList="nodownload" onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} id="main-vid" controls src={video?.videoFile} alt="Video" autoPlay className="w-full duration-300 ease-in-out"></video>
+                <div className="video-container w-full h-[380px] rounded-2xl relative overflow-hidden flex justify-center items-center">
+                    <video controlsList="nodownload" onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} id="main-vid" controls src={video?.videoFile} alt="Video" autoPlay className="w-full h-full duration-300 ease-in-out"></video>
                     <div onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} className={`additional-controls opacity-${customVidControlsOpacity} absolute top-1/2 transform -translate-y-1/2 w-full h-[30%] p-4 flex items-center justify-evenly`}>
-                        <button onClick={() => forward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
+                        <button onClick={() => backward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
                             <span><i className="fa-solid fa-backward "></i></span>
                         </button>
                         <button onClick={() => handlePlayPause()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
@@ -364,7 +364,7 @@ const Video = () => {
                                 {isEnded ? <i className="fa-solid fa-arrow-rotate-left"></i> : (mainVideo && mainVideo.paused ? <i className="fa-solid fa-play"></i> : <i className="fa-solid fa-pause"></i>)}
                             </span>
                         </button>
-                        <button onClick={() => backward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
+                        <button onClick={() => forward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
                             <span><i className="fa-solid fa-forward "></i></span>
                         </button>
                     </div>
