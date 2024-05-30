@@ -54,8 +54,8 @@ const VideoCardRelatedVideo = ({
     const  minAndSec = secondsToMinutes(duration)
 
     return(
-        <Link to={`/video/${videoId}`} className="container w-full h-[72px] flex overflow-hidden my-3 hover:bg-black hover:bg-opacity-10">
-            <div className="thumbnail w-[40%] h-[72px] relative overflow-hidden rounded-xl">
+        <Link to={`/video/${videoId}`} className="container w-full h-[94px] flex overflow-hidden pl-2 py-3 hover:bg-black hover:bg-opacity-10 rounded-xl">
+            <div className="thumbnail w-[50%] h-[72px] relative overflow-hidden rounded-xl">
                 <img src={thumbnail} alt="thumbnail" className="w-full h-full object-cover" />
                 <div className="duration m-2 absolute right-0 bottom-0 bg-[#252525] flex justify-center items-center text-xs text-white rounded-lg">
                 <p>{minAndSec}</p>
@@ -68,21 +68,6 @@ const VideoCardRelatedVideo = ({
                     <p className="text-xs flex text-[#606060]"><span>{views} views</span><span className="flex justify-center items-center"><LuDot /></span><span>{`${ago.value} ${ago.unit} ago`}</span></p>
                 </div>
             </div>
-            {/* <div className="details w-full h-auto sm:h-[140px] flex space-x-3 py-3">
-                <div className="avatar w-[36px] flex-shrink-0">
-                <img src={avatar} alt="avatar" className="rounded-full w-[36px] h-[36px] object-cover" />
-                </div>
-                <div className="info flex-grow text-xs overflow-hidden">
-                <div className="mb-1">
-                    <p className="font-semibold text-sm max-h-[40px] overflow-hidden text-ellipsis">{title}</p>
-                </div>
-                <p>{channelName}</p>
-                <div className="flex space-x-4 text-gray-500">
-                    <p>{views} views</p>
-                    <p>{`${ago.value} ${ago.unit} ago`}</p>
-                </div>
-                </div>
-            </div> */}
         </Link>
     )
 }

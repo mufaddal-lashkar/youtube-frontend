@@ -83,7 +83,7 @@ const ChannelPage = () => {
                 <img className="w-[100%] h-full" src={channel?.coverImage} alt="coverImg" />
             </div>
             <div className="channel-info flex justify-center items-center w-full h-[210px] my-4">
-                <div className="avatar-container h-[180px] w-[180px] rounded-full overflow-hidden">
+                <div className="avatar-container h-[180px] w-[180px] bg-black flex justify-center items-center rounded-full overflow-hidden">
                     <img className="w-full" src={channel?.avatar} alt="avatar" />
                 </div>
                 <div className="info w-[calc(100%_-_180px)] h-full flex flex-col justify-center px-4">

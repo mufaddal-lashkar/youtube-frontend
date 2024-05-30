@@ -50,7 +50,7 @@ const Navbar = () => {
                 </div>
             </div>
             <div className="h-full w-[64px] flex justify-center items-center ">
-                <img src={avatar} alt="avatar image" className="h-[34px] w-[34px] rounded-full" />
+                <img src={avatar} alt="avatar image" className=" w-[34px] rounded-full" />
             </div>
         </div>
     )

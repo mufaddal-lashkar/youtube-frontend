@@ -55,7 +55,7 @@ const Home = () => {
     
     return (
         <div className="wrapper w-[100%] h-[100vh] overflow-y-scroll flex flex-col">
-            <div className=" py-10 flex flex-wrap space-x-3">
+            <div className=" py-10 flex flex-wrap">
                 {/* <button onClick={getHomeVideos}>Click</button>
                 <button onClick={handleLogout}>Logout</button> */}
                 {
@@ -65,8 +65,8 @@ const Home = () => {
                                 thumbnail={vid.thumbnail} 
                                 title={vid.title} 
                                 duration={vid.duration}
-                                channelName={vid.owner[0].username}
-                                avatar={vid.owner[0].avatar}
+                                channelName={vid.owner.username}
+                                avatar={vid.owner.avatar}
                                 views={vid.views}
                                 uploaded={vid.createdAt}
                                 videoId={vid._id}

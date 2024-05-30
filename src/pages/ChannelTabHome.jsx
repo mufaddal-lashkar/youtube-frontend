@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { server } from "../conf";
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
-import {VideoCardChannelTab} from "../components/index"
+import {HomeVideo} from "../components/index"
 import { IoIosArrowForward, IoIosArrowBack } from "react-icons/io";
 
 const ChannelTabHome = () => {
@@ -43,10 +43,10 @@ const ChannelTabHome = () => {
                     <p className="text-lg font-medium text-[#272727]">Videos</p>
                     <button className="text-sm text-[#065fd4] font-medium" onClick={() => handleReplaceHomeWithVideos()}>See All</button>
                 </div>
-                <div className="videos-display flex space-x-4">
+                <div className="videos-display inline-flex space-x-4">
                     {videos?(
                         videos.map((video) => {
-                            return <VideoCardChannelTab 
+                            return <HomeVideo
                                 key={video._id} 
                                 thumbnail={video.thumbnail}
                                 title={video.title}

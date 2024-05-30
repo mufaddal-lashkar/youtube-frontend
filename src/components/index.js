@@ -17,5 +17,5 @@ export {
     HomeVideo,
     Comment,
     VideoCardChannelTab,
-    VideoCardRelatedVideo
+    VideoCardRelatedVideo,
 }

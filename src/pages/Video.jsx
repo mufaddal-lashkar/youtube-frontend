@@ -323,11 +323,31 @@ const Video = () => {
         await axios.post(apiUrl, data)
         .then((res) => {
             setRelatedVideos(res.data.data);
+            console.log("Related videos",res.data.data);
         })
         .catch((err) => {
             // console.log(err);
         })
     }
+
+    // function to get views
+    useEffect(() => {
+        updateView()
+    },[videoId])
+        const updateView = async () => {
+            const apiUrl = `${server}/views/update-view/v/${videoId}`
+            const data = {
+                userId: user?.user._id
+            }
+            await axios.post(apiUrl, data)
+            .then((res) => {
+                console.log(res.data)
+            })
+            .catch((err) => {
+                console.log(err)
+            })
+        }
+        // setTimeout(updateView, 10000);
     
     return ( 
         <>
@@ -353,7 +373,7 @@ const Video = () => {
         )}
         <div className="container h-[100vh] w-full flex overflow-y-scroll overflow-x-hidden">
             <div className="left-panel h-full w-[70%] p-6">
-                <div className="video-container w-full h-[380px] rounded-2xl relative overflow-hidden flex justify-center items-center">
+                <div className="video-container w-full h-[380px] rounded-2xl relative overflow-hidden flex justify-center items-center bg-black">
                     <video controlsList="nodownload" onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} id="main-vid" controls src={video?.videoFile} alt="Video" autoPlay className="w-full h-full duration-300 ease-in-out"></video>
                     <div onMouseLeave={() => leaveVidControlOpacity()} onMouseEnter={() => enterVidControlOpacity()} className={`additional-controls opacity-${customVidControlsOpacity} absolute top-1/2 transform -translate-y-1/2 w-full h-[30%] p-4 flex items-center justify-evenly`}>
                         <button onClick={() => backward10Sec()} className="text-white text-2xl hover:bg-gray-700 hover:bg-opacity-20 cursor-pointer w-12 h-12 rounded-full flex justify-center items-center">
@@ -424,7 +444,7 @@ const Video = () => {
                     </div>
                     <div className="video-description bg-[#000000] bg-opacity-5 w-full h-auto p-2 rounded-xl text-xs text-[#0f0f0f] mt-3">
                         <span className="font-bold mr-3">{video?.views} views</span><span className="font-bold mr-3">{`${ago.value} ${ago.unit} ago`}</span><br />
-                        {video?.description}
+                        <span className="line-clamp-5">{video?.description}</span>
                     </div>
                     <div className="video-comments my-4">
                         <span className="font-semibold text-base">{comments?.length} Comments</span>
@@ -462,7 +482,7 @@ const Video = () => {
                     </div>
                 </div> 
             </div>
-            <div className="right-panel h-full w-[30%] p-6">
+            <div className="right-panel h-full w-[30%] pl-4">
                 <div className="related">
                     <div className="text-xl font-bold text-[#272727] mb-4">Related videos</div>
                 </div>
