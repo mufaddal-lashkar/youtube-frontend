@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { BiLike } from "react-icons/bi";
+import { BiLike, BiSolidLike } from "react-icons/bi";
 import { MdEdit } from "react-icons/md";
 import { IoClose } from "react-icons/io5";
 import { server } from "../conf";
@@ -13,12 +13,11 @@ const Comment = ({
     username,
     ownerId,
     createdAt,
-    likes,
 }) => {
 
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
 
-    // fuction to get data when video is uploaded
+    // fuction to get data when comment is uploaded
     function getTimeDifference(createdAt) {
         const createdAtDate = new Date(createdAt);
         const nowDate = new Date();
@@ -86,6 +85,8 @@ const Comment = ({
             setSubmitDisabled(true)
         }
     }, [commentTextValue])
+
+    // function to update comment
     const updateComment = async () => {
         const apiUrl = `${server}/comments/c/${commentId}`
         const data = {
@@ -100,6 +101,51 @@ const Comment = ({
         })
         .catch((err) => {
             console.log(err);
+        })
+    }
+
+    // function to get comments likes
+    const [commentLikes, setCommentLikes] = useState(0)
+    const [isCommentLiked, setIsCommentLiked] = useState()
+    useEffect(() => {
+        getCommentsLikes()
+        isCommentLikedByCurrentUser()
+    },[commentId])
+    const getCommentsLikes = async () => {
+        const apiUrl = `${server}/likes/comment-likes/c/${commentId}`
+        await axios.get(apiUrl)
+        .then((res) => {
+            setCommentLikes(res.data.data);
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
+    }
+    const handleCommentLike = async () => {
+        const apiUrl = `${server}/likes/toggle/c/${commentId}`
+        const data = {
+            userId: user?.user._id
+        }
+        await axios.post(apiUrl, data)
+        .then((res) => {
+            setIsCommentLiked(res.data.data);
+            getCommentsLikes()
+        })
+        .catch((err) => {
+            // console.log(err);
+        })
+    }
+    const isCommentLikedByCurrentUser = async () => {
+        const apiUrl = `${server}/likes/isCommentLikedByCurrentUser/c/${commentId}`
+        const data = {
+            userId: user?.user._id
+        }
+        await axios.post(apiUrl, data)
+        .then((res) => {
+            setIsCommentLiked(res.data.data);
+        })
+        .catch((err) => {
+            // console.log(err);
         })
     }
 
@@ -129,7 +175,7 @@ const Comment = ({
                 <span className="text-xs"><span className="mr-3 font-semibold">{username}</span><span className="text-[10px]">{`${ago.value} ${ago.unit} ago`}</span></span><br />
                 <p className="text-[12px]">{content}</p>
                 <div className="like flex justify-between mt-1">
-                    <button className="text-[12px] space-x-2"><BiLike className="text-base"/><span>{likes}</span></button>
+                    <button onClick={() => handleCommentLike()} className="text-[12px] space-x-2 flex justify-center items-center">{isCommentLiked? <BiSolidLike className="text-base"/> : <BiLike className="text-base"/>}<span>{commentLikes}</span></button>
                     {showDeleteBtn? (
                         <div className="flex space-x-2">
                             <button onClick={() => handleCommentDelete()} className="text-[12px] bg-black bg-opacity-5 hover:bg-opacity-10 rounded-full h-7 w-7 flex justify-center items-center"><RiDeleteBin6Line className="text-base"/></button>
