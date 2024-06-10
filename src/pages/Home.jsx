@@ -37,7 +37,7 @@ const Home = () => {
     return (
                 <div className="wrapper w-[100%] h-[100vh] overflow-y-scroll flex flex-col">
                     <div className=" py-10 flex flex-wrap">
-                        {
+                        {/* {
                             videos?.map((vid) => {
                                 return <HomeVideo 
                                         key={vid._id} 
@@ -51,7 +51,7 @@ const Home = () => {
                                         videoId={vid._id}
                                         />
                             })
-                        }
+                        } */}
                     </div>
                 </div>
     )

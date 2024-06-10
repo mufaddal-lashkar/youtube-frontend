@@ -15,6 +15,7 @@ import ChannelTabPlaylists from "./ChannelTabPlaylists"
 import ChannelTabTweets from "./ChannelTabTweets"
 import ChannelTabCommunity from "./ChannelTabCommunity"
 import YourChannel from "./YourChannel";
+import UploadVideo from "./UploadVideo";
 
 export {
     Home,
@@ -33,5 +34,6 @@ export {
     ChannelTabPlaylists,
     ChannelTabTweets,
     ChannelTabCommunity,
-    YourChannel
+    YourChannel,
+    UploadVideo
 }   
