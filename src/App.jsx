@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css'
-import { Home, Login, Register, Layout, Profile, Shorts, Subscriptions, Search, Video, ChannelPage, ChannelTabHome, ChannelTabVideos, ChannelTabShorts, ChannelTabPlaylists, ChannelTabTweets, ChannelTabCommunity } from './pages'
+import { Home, Login, Register, Layout, Profile, Shorts, Subscriptions, Search, Video, ChannelPage, ChannelTabHome, ChannelTabVideos, ChannelTabShorts, ChannelTabPlaylists, ChannelTabTweets, ChannelTabCommunity, YourChannel } from './pages'
 import { ProtectedRoute } from './components'
 
 function App() {
@@ -18,6 +18,7 @@ function App() {
                 <Route path='subscriptions' element={<ProtectedRoute><Subscriptions /></ProtectedRoute>}/>
                 <Route path='search/:searchText' element={<ProtectedRoute><Search /></ProtectedRoute>}/>
                 <Route path='video/:videoId' element={<ProtectedRoute><Video /></ProtectedRoute>}/>
+                <Route path='Yourchannel/:channelId' element={<ProtectedRoute><YourChannel /></ProtectedRoute>}/>
                 <Route path='channel/:channelId' element={<ProtectedRoute><ChannelPage /></ProtectedRoute>}>
                   <Route path='home' element={<ProtectedRoute><ChannelTabHome /></ProtectedRoute>}/>
                   <Route path='videos' element={<ProtectedRoute><ChannelTabVideos /></ProtectedRoute>}/>

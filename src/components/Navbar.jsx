@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaBars } from "react-icons/fa6";
+import { RiVideoAddLine } from "react-icons/ri";
 
 const Navbar = () => {
     
@@ -50,6 +51,7 @@ const Navbar = () => {
                 </div>
             </div>
             <div className="h-full w-[64px] flex justify-center items-center ">
+                <div><RiVideoAddLine className=" w-[34px] h-[34px] text-sm rounded-full hover:bg-black hover:bg-opacity-10"/></div>
                 <img src={avatar} alt="avatar image" className=" w-[34px] rounded-full" />
             </div>
         </div>

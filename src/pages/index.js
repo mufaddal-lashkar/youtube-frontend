@@ -14,6 +14,7 @@ import ChannelTabShorts from "./ChannelTabShorts"
 import ChannelTabPlaylists from "./ChannelTabPlaylists"
 import ChannelTabTweets from "./ChannelTabTweets"
 import ChannelTabCommunity from "./ChannelTabCommunity"
+import YourChannel from "./YourChannel";
 
 export {
     Home,
@@ -31,5 +32,6 @@ export {
     ChannelTabShorts,
     ChannelTabPlaylists,
     ChannelTabTweets,
-    ChannelTabCommunity
+    ChannelTabCommunity,
+    YourChannel
 }   

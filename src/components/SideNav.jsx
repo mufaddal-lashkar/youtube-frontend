@@ -12,6 +12,7 @@ import { BiLike } from "react-icons/bi";
 const Navbar = () => {
 
     const logoProp = "text-base"
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
 
     const [activePage, setActivePage] = useState()
 
@@ -29,7 +30,7 @@ const Navbar = () => {
                     <h2 className="font-semibold text-sm">You :-</h2>
                 </div>
                 <div className="">
-                <NavItem to="/your-channel" text="Your channel" icon={<BsPersonVideo3 className={logoProp}/>}/>
+                <NavItem to={`/Yourchannel/${user?.user._id}`} text="Your channel" icon={<BsPersonVideo3 className={logoProp}/>}/>
                 <NavItem to="/history" text="History" icon={<GoHistory className={logoProp}/>}/>
                 <NavItem to="/playlists" text="Playlists" icon={<CgPlayList className={logoProp}/>}/>
                 <NavItem to="/your-videos" text="Your videos" icon={<AiOutlinePlaySquare className={logoProp}/>}/>
