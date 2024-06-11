@@ -5,7 +5,7 @@ import videoReducer from "./VideosSlice"
 const store = configureStore({
     reducer: {
         user: userReducer,
-        videos: videoReducer
+        videos: videoReducer,
     }
 })
 
