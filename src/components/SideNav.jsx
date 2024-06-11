@@ -8,13 +8,12 @@ import { CgPlayList } from "react-icons/cg";
 import { AiOutlinePlaySquare } from "react-icons/ai";
 import { FaRegClock } from "react-icons/fa6";
 import { BiLike } from "react-icons/bi";
+import { RiVideoUploadLine } from "react-icons/ri";
 
 const Navbar = () => {
 
     const logoProp = "text-base"
     const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")))
-
-    const [activePage, setActivePage] = useState()
 
     return (
         <div className="w-[200px] text-sm h-[calc(100%_-_56px)] bottom-0 fixed flex flex-col items-center">
@@ -30,12 +29,13 @@ const Navbar = () => {
                     <h2 className="font-semibold text-sm">You :-</h2>
                 </div>
                 <div className="">
-                <NavItem to={`/Yourchannel/${user?.user._id}`} text="Your channel" icon={<BsPersonVideo3 className={logoProp}/>}/>
-                <NavItem to="/history" text="History" icon={<GoHistory className={logoProp}/>}/>
-                <NavItem to="/playlists" text="Playlists" icon={<CgPlayList className={logoProp}/>}/>
-                <NavItem to="/your-videos" text="Your videos" icon={<AiOutlinePlaySquare className={logoProp}/>}/>
-                <NavItem to="/watch-later" text="Watch later" icon={<FaRegClock className={logoProp}/>}/>
-                <NavItem to="/liked-videos" text="Liked videos" icon={<BiLike className={logoProp}/>}/>
+                    <NavItem to={`/Yourchannel/${user?.user._id}`} text="Your channel" icon={<BsPersonVideo3 className={logoProp}/>}/>
+                    <NavItem to="/upload-video" text="Upload video" icon={<RiVideoUploadLine className={logoProp}/>}/>
+                    <NavItem to="/history" text="History" icon={<GoHistory className={logoProp}/>}/>
+                    <NavItem to="/playlists" text="Playlists" icon={<CgPlayList className={logoProp}/>}/>
+                    <NavItem to="/your-videos" text="Your videos" icon={<AiOutlinePlaySquare className={logoProp}/>}/>
+                    <NavItem to="/watch-later" text="Watch later" icon={<FaRegClock className={logoProp}/>}/>
+                    <NavItem to="/liked-videos" text="Liked videos" icon={<BiLike className={logoProp}/>}/>
                 </div>
             </div>
             <hr className="h-[1px] w-[80%] bg-[#ccc]"/>
